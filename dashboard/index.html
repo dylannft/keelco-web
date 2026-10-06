@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Call log | Keel Co</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0F2B3A">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/dashboard/dash.css">
+</head>
+<body>
+
+<!-- Loading -->
+<div id="view-loading" class="loading" aria-live="polite">Loading your call log…</div>
+
+<!-- Sign in -->
+<div id="view-login" class="login" hidden>
+  <aside class="login-side">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="" width="30" height="30">Keel Co</a>
+    <div>
+      <p class="login-quote">Every call your team missed, and what each caller needed.</p>
+    </div>
+    <p class="login-small">Brisbane, Queensland</p>
+  </aside>
+  <main class="login-main">
+    <form id="login-form" class="login-form" novalidate>
+      <h1>Sign in to your call log</h1>
+      <p class="muted">Enter your work email and we'll send you a sign-in link. No password needed.</p>
+      <div class="field">
+        <label for="login-email">Work email</label>
+        <input id="login-email" type="email" autocomplete="email" required>
+      </div>
+      <button class="btn btn-primary" type="submit" id="login-btn">Email me a sign-in link</button>
+      <p id="login-status" class="status" role="status" aria-live="polite"></p>
+    </form>
+    <div id="login-sent" class="login-form" hidden>
+      <h1>Check your inbox</h1>
+      <p class="muted">We've sent a sign-in link to <strong id="sent-to"></strong>. Open it on this device to see your call log. The link works once and expires after an hour.</p>
+      <button class="btn btn-quiet" type="button" id="login-again">Use a different email</button>
+    </div>
+  </main>
+</div>
+
+<!-- App -->
+<div id="view-app" class="app" hidden>
+  <header class="topbar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="" width="28" height="28">Keel Co</a>
+    <div class="client" id="client-wrap">
+      <span class="client-name" id="client-name"></span>
+      <select id="client-select" aria-label="Business" hidden></select>
+    </div>
+    <div class="user">
+      <span id="user-email" class="user-email"></span>
+      <button class="btn btn-quiet-dark" id="sign-out" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="titlebar">
+      <h1>Calls</h1>
+      <div class="segmented" role="group" aria-label="Time period">
+        <button type="button" data-period="7" aria-pressed="true">7 days</button>
+        <button type="button" data-period="30" aria-pressed="false">30 days</button>
+        <button type="button" data-period="all" aria-pressed="false">All time</button>
+      </div>
+    </div>
+
+    <div id="no-access" class="empty" hidden>
+      <h2>This email isn't linked to a call log yet</h2>
+      <p>Ask Keel Co to add <strong id="no-access-email"></strong> to your business, then sign in again.</p>
+    </div>
+
+    <div id="content">
+      <section class="figures" aria-label="Summary">
+        <div><span class="fig" id="fig-calls">0</span><span class="fig-label">Calls answered</span></div>
+        <div><span class="fig" id="fig-urgent">0</span><span class="fig-label">Urgent</span></div>
+        <div><span class="fig" id="fig-after">0</span><span class="fig-label">Outside 9 to 5 weekdays</span></div>
+        <div><span class="fig" id="fig-waiting">0</span><span class="fig-label">Waiting for a call back</span></div>
+      </section>
+
+      <div class="grid2">
+        <section class="panel chart-panel" aria-labelledby="chart-title">
+          <div class="panel-head">
+            <h2 id="chart-title">Calls per day</h2>
+            <div class="legend" aria-hidden="true"><span><i class="sw sw-urgent"></i>Urgent</span><span><i class="sw sw-other"></i>Other calls</span></div>
+          </div>
+          <div class="chart" id="chart"></div>
+          <div class="tip" id="chart-tip" role="tooltip" hidden></div>
+        </section>
+
+        <section class="panel" aria-labelledby="waiting-title">
+          <div class="panel-head"><h2 id="waiting-title">Waiting for a call back</h2></div>
+          <ul class="waiting" id="waiting"></ul>
+        </section>
+      </div>
+
+      <section class="panel log-panel" aria-labelledby="log-title">
+        <div class="panel-head">
+          <h2 id="log-title">Call log</h2>
+          <span class="muted" id="log-count"></span>
+        </div>
+        <div class="filters">
+          <input type="search" id="f-search" placeholder="Search name, number, unit or reason" aria-label="Search calls">
+          <select id="f-type" aria-label="Type of call"><option value="">All types</option></select>
+          <select id="f-urgency" aria-label="Urgency"><option value="">Any urgency</option><option value="urgent">Urgent</option><option value="normal">Normal</option><option value="low">Low</option></select>
+          <select id="f-status" aria-label="Call back status"><option value="">Any status</option><option value="waiting">Waiting</option><option value="done">Called back</option></select>
+        </div>
+        <div class="table-wrap">
+          <table class="calls">
+            <thead><tr><th scope="col">When</th><th scope="col">Caller</th><th scope="col">What it's about</th><th scope="col">Type</th><th scope="col">Status</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="log-empty" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Call detail -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" aria-labelledby="d-title" role="dialog" aria-modal="true" hidden>
+    <div class="drawer-head">
+      <div>
+        <h2 id="d-title"></h2>
+        <p class="muted" id="d-meta"></p>
+      </div>
+      <button class="icon-btn" id="d-close" type="button" aria-label="Close call details">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="d-actions">
+        <span id="d-pills"></span>
+        <button class="btn btn-primary" id="d-handled" type="button"></button>
+      </div>
+      <dl class="d-facts" id="d-facts"></dl>
+      <div class="d-block" id="d-summary-block"><h3>Summary</h3><p id="d-summary"></p></div>
+      <div class="d-block" id="d-unanswered-block" hidden><h3>Asked but couldn't answer</h3><p id="d-unanswered"></p></div>
+      <div class="d-block"><h3>Transcript</h3><div id="d-transcript" class="transcript"></div></div>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/config.js"></script>
+<script src="/dashboard/app.js"></script>
+</body>
+</html>
