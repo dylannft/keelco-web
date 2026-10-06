@@ -27,7 +27,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 1rem; line-height: 1.5; font-feature-settings: "tnum" 1; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 1rem; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 3px solid var(--urgent); outline-offset: 2px; border-radius: 6px; }
 h1, h2, h3 { margin: 0; letter-spacing: -0.015em; }
@@ -185,3 +185,6 @@ table.calls { width: 100%; border-collapse: collapse; font-size: .95rem; }
 .bubble.caller small { color: var(--on-tide-muted); }
 
 .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--tide); color: var(--on-tide); padding: 12px 18px; border-radius: 999px; font-weight: 600; z-index: 30; box-shadow: 0 12px 30px -12px rgba(0,0,0,.5); }
+
+/* Tabular figures only where numbers line up */
+.fig, .calls .when, .w-when, .chart .axis text, .d-facts dd, .tip { font-variant-numeric: tabular-nums; }
