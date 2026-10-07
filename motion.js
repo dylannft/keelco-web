@@ -59,23 +59,22 @@
 
     var paused = false, timers = [], scene = 0, talking = false;
 
-    // Waveform: smooth pseudo-random heights while someone is speaking, a calm line otherwise.
-    var t0 = performance.now();
+    // Waveform: bars scale on the GPU (no layout work), and only while someone is
+    // speaking and the stage is on screen. Otherwise they settle into a flat line.
+    var t0 = performance.now(), onScreen = true, rafId = 0, flat = false;
+    function setFlat() { if (flat) return; flat = true; for (var i = 0; i < bars.length; i++) bars[i].style.transform = "scaleY(.08)"; }
     function frame(now) {
+      rafId = 0;
+      if (!talking || paused || !onScreen) { setFlat(); return; }
+      flat = false;
       var t = (now - t0) / 1000;
       for (var i = 0; i < bars.length; i++) {
-        var h;
-        if (talking && !paused) {
-          h = 18 + 70 * Math.abs(Math.sin(t * 6.3 + i * 0.55) * Math.sin(t * 2.1 + i * 0.23) + 0.35 * Math.sin(t * 11 + i));
-          h = Math.min(100, h);
-        } else {
-          h = 6 + 3 * Math.sin(t * 2 + i * 0.4);
-        }
-        bars[i].style.height = h.toFixed(1) + "%";
+        var h = 0.18 + 0.7 * Math.abs(Math.sin(t * 6.3 + i * 0.55) * Math.sin(t * 2.1 + i * 0.23) + 0.35 * Math.sin(t * 11 + i));
+        bars[i].style.transform = "scaleY(" + Math.min(1, h).toFixed(3) + ")";
       }
-      if (!reduce) requestAnimationFrame(frame);
+      rafId = requestAnimationFrame(frame);
     }
-    if (!reduce) requestAnimationFrame(frame);
+    function wake() { if (!reduce && !rafId) rafId = requestAnimationFrame(frame); }
 
     function later(fn, ms) { timers.push(setTimeout(function () { if (!paused) fn(); else pending.push(fn); }, ms)); }
     var pending = [];
@@ -114,7 +113,7 @@
         (function next() {
           if (k >= S.lines.length) { return finish(); }
           var L = S.lines[k++], li = document.createElement("li"); li.className = L[0];
-          lines.appendChild(li); st.setAttribute("data-speaker", L[0]); talking = true;
+          lines.appendChild(li); st.setAttribute("data-speaker", L[0]); talking = true; wake();
           type(li, L[1], function () { talking = false; st.removeAttribute("data-speaker"); later(next, 380); });
         })();
       }, 1900);
@@ -138,7 +137,7 @@
       pauseBtn.innerHTML = paused
         ? '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>'
         : '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor"/></svg>';
-      if (!paused) { var p = pending; pending = []; p.forEach(function (fn) { fn(); }); }
+      if (!paused) { var p = pending; pending = []; p.forEach(function (fn) { fn(); }); wake(); }
     });
     if (reduce) pauseBtn.hidden = true;
 
@@ -147,9 +146,11 @@
       var started = false;
       new IntersectionObserver(function (es) {
         es.forEach(function (e) {
+          onScreen = e.isIntersecting;
+          if (onScreen) wake();
           if (e.isIntersecting && !started) { started = true; play(0); }
         });
-      }, { threshold: 0.25 }).observe(st);
+      }, { threshold: 0.05 }).observe(st);
     } else { play(0); }
   }
 
@@ -161,13 +162,19 @@
     var items = [].slice.call(steps.children);
     if (reduce) { items.forEach(function (li) { li.classList.add("lit"); }); steps.style.setProperty("--progress", 1); }
     else {
-      var onScroll = function () {
+      // At most one measurement per frame, and only touch the page when something changed.
+      var queued = false, lastP = -1;
+      var update = function () {
+        queued = false;
         var r = steps.getBoundingClientRect(), vh = window.innerHeight;
-        var p = Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.55)));
-        steps.style.setProperty("--progress", p.toFixed(3));
-        items.forEach(function (li, i) { li.classList.toggle("lit", p >= (i + 0.5) / items.length); });
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        var p = Math.round(Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.55))) * 100) / 100;
+        if (p === lastP) return; lastP = p;
+        steps.style.setProperty("--progress", p);
+        items.forEach(function (li, i) { var on = p >= (i + 0.5) / items.length; if (li.classList.contains("lit") !== on) li.classList.toggle("lit", on); });
       };
-      window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+      var onScroll = function () { if (!queued) { queued = true; requestAnimationFrame(update); } };
+      window.addEventListener("scroll", onScroll, { passive: true }); update();
     }
   }
 
