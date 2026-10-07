@@ -18,7 +18,7 @@
         ["ai", "Thanks. I'm marking this as urgent for our on-call team now."]
       ],
       tags: [["Urgent", true], ["Lockout", false], ["Seabreeze 1204", false], ["Calling number confirmed", false]],
-      sms: ["URGENT: Guest locked out", "Sam Lee, Seabreeze 1204. Key code not working. Call back 0400 111 222."]
+      sms: ["URGENT: Guest locked out", "Bruce Wayne, Seabreeze 1204. Key code not working. Call back 0400 111 222."]
     },
     {
       chip: "Physio clinic", time: "6:52pm", sub: "Front desk with a patient", ended: "Call ended after 1:21",
@@ -30,7 +30,7 @@
         ["ai", "Got it. I'll pass this to reception to confirm a time with you first thing."]
       ],
       tags: [["New patient", false], ["Booking request", false], ["Early mornings", false], ["Callback 8am", false]],
-      sms: ["Booking request", "Mia Chen, new patient, lower back pain. Prefers early mornings. Call back 0412 555 019."]
+      sms: ["Booking request", "Joel Barish, new patient, lower back pain. Prefers early mornings. Call back 0412 555 019."]
     },
     {
       chip: "Plumbing", time: "9:58pm", sub: "Team on another job", ended: "Call ended after 1:34",
@@ -42,7 +42,7 @@
         ["ai", "Thanks. I'm sending this to our on-call plumber right now."]
       ],
       tags: [["Urgent", true], ["Burst HWS", false], ["12 Ocean Pde", false], ["Calling number confirmed", false]],
-      sms: ["URGENT: Burst hot water system", "Josh Patel, 12 Ocean Pde, Burleigh. Water through laundry. Call back 0433 820 114."]
+      sms: ["URGENT: Burst hot water system", "John Pork, 12 Ocean Pde, Burleigh. Water through laundry. Call back 0433 820 114."]
     }
   ];
 
