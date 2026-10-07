@@ -240,3 +240,24 @@ form.enquiry { background: var(--paper); border: 1px solid var(--line); border-r
 
 /* Tabular figures only where numbers line up */
 .log time, .steps li::before, .figs b, .mini-table td:first-child { font-variant-numeric: tabular-nums; }
+
+/* Industry switch in the hero log */
+.log-switch { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 4px 14px; }
+.log-switch button { font: 600 .85rem var(--font); color: var(--on-tide-muted); background: transparent; border: 1.5px solid var(--tide-line); border-radius: 999px; padding: 6px 12px; min-height: 34px; cursor: pointer; }
+.log-switch button[aria-pressed="true"] { background: var(--on-tide); color: var(--tide); border-color: var(--on-tide); }
+.log-switch button:hover { border-color: var(--on-tide-muted); }
+
+/* Industries: tabbed */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
+.tabs [role="tab"] { font: 700 1rem var(--font); color: var(--slate); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 4px 14px; margin-right: 22px; margin-bottom: -1px; cursor: pointer; }
+.tabs [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--seaglass-deep); }
+.tabs [role="tab"]:hover { color: var(--ink); }
+.tab-intro { font-size: 1.15rem; color: var(--slate); max-width: 46em; margin-bottom: 8px; }
+@media (max-width: 560px) { .tabs { gap: 0; } .tabs [role="tab"] { margin-right: 16px; font-size: .95rem; } }
+
+/* Trust strip */
+.trust { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--tide-line); margin-top: clamp(40px, 6vw, 72px); }
+.trust div { padding: 20px 20px 0 0; }
+.trust b { display: block; color: var(--on-tide); font-size: 1.05rem; }
+.trust span { color: var(--on-tide-muted); font-size: .95rem; }
+@media (max-width: 860px) { .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; } }
