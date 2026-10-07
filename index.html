@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/motion.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -43,15 +44,28 @@
         <p class="hero-note">Built and supported in Brisbane.</p>
       </div>
 
-      <div class="log" aria-label="Example: an evening of missed calls handled by Keel Co">
-        <div class="log-head"><strong>After hours on the line</strong><span>Example evening</span></div>
-        <div class="log-switch" role="group" aria-label="Show an example for">
-          <button type="button" data-ex="letting" aria-pressed="true">Holiday letting</button>
-          <button type="button" data-ex="clinic" aria-pressed="false">Physio clinic</button>
-          <button type="button" data-ex="trades" aria-pressed="false">Plumbing</button>
+      <div class="stage" id="stage" role="img" aria-label="Animated example: Keel Co answers a missed call, talks with the caller, saves a summary and texts the on-call phone.">
+        <div class="sms" id="sc-sms" aria-hidden="true">
+          <img src="/assets/mark.svg" alt="">
+          <div class="sms-top"><b>Keel Co</b><span>now</span></div>
+          <div class="sms-body"><strong id="sms-title"></strong><span id="sms-body"></span></div>
+          <span class="sms-link">View call in dashboard</span>
         </div>
-        <ol id="log-list"></ol>
-        <p class="log-foot">An illustration of how calls are sorted. Names and details are made up.</p>
+        <div class="stage-top">
+          <span class="scenario-chip" id="sc-chip">Holiday letting</span>
+          <span class="stage-time" id="sc-time">11:42pm</span>
+          <button class="stage-pause" id="sc-pause" type="button" aria-pressed="false" aria-label="Pause the example call"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="caller-row">
+          <div class="ring-wrap"><span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z" fill="currentColor"/></svg>
+          </div>
+          <div><div class="call-state" id="sc-state">Incoming call</div><div class="call-sub" id="sc-sub">Rang out at reception</div></div>
+        </div>
+        <div class="wave" id="wave" aria-hidden="true"></div>
+        <div class="wave-legend" aria-hidden="true"><span class="k">Keel Co</span><span class="c">Caller</span></div>
+        <ol class="transcript" id="sc-lines" aria-hidden="true"></ol>
+        <div class="summary" id="sc-summary" aria-hidden="true"></div>
       </div>
     </div>
   </section>
@@ -146,7 +160,7 @@
             </div>
             <table class="mini-table">
               <tr><td>11:42pm</td><td><b>Guest locked out</b><br>Seabreeze 1204 <span class="pill urgent">Urgent</span></td><td><span class="pill done">Called back</span></td></tr>
-              <tr><td>10:15pm</td><td><b>No hot water</b><br>The Shoals 7 <span class="pill urgent">Urgent</span></td><td><span class="pill">Waiting</span></td></tr>
+              <tr><td>10:15pm</td><td><b>No hot water</b><br>The Shoals 7 <span class="pill urgent">Urgent</span></td><td><span class="pill" data-flip>Waiting</span></td></tr>
               <tr><td>9:03pm</td><td><b>Booking enquiry</b><br>4 nights, January</td><td><span class="pill">Waiting</span></td></tr>
             </table>
           </div>
@@ -290,54 +304,8 @@
 </footer>
 
 <script src="/config.js"></script>
+<script src="/motion.js" defer></script>
 <script>
-// Hero log: example evenings for three kinds of business. The first view plays one arrival.
-(function () {
-  var EX = {
-    letting: [
-      ["11:42pm", "Guest locked out", "Seabreeze, unit 1204. Key code not working.", "On-call texted 9 seconds after the call", true],
-      ["10:15pm", "No hot water", "The Shoals, unit 7. Family checked in today.", "On-call texted", true],
-      ["9:03pm", "Booking enquiry", "4 nights in January, 2 adults and 2 kids, near the beach.", "Sent to reservations", false],
-      ["7:48pm", "Owner question", "Wants to talk about next month's statement.", "Message for management", false]
-    ],
-    clinic: [
-      ["7:55pm", "New patient booking", "Lower back pain, prefers early mornings this week.", "Booking request for reception", false],
-      ["7:20pm", "Cancellation", "Can't make 9:30am tomorrow with Sarah.", "Slot flagged for reception", false],
-      ["6:41pm", "Health fund question", "Asking whether dry needling is covered.", "Callback in the morning", false],
-      ["6:05pm", "Possible emergency", "Caller mentioned chest pain.", "Told to ring 000", true]
-    ],
-    trades: [
-      ["9:58pm", "Burst hot water system", "Water through the laundry, 12 Ocean Pde.", "On-call texted 7 seconds after the call", true],
-      ["8:30pm", "Quote request", "Bathroom renovation, wants a site visit next week.", "New job for the office", false],
-      ["7:12pm", "Arrival time", "Asking when the plumber is coming tomorrow.", "Message for the office", false],
-      ["6:40pm", "Blocked toilet", "Only toilet in the house, two young kids.", "On-call texted", true]
-    ]
-  };
-  var list = document.getElementById('log-list');
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
-  function show(key, animate) {
-    list.innerHTML = EX[key].map(function (r, i) {
-      return '<li' + (r[4] ? ' class="urgent"' : '') + (i === 0 ? ' id="newest"' : '') + '><time>' + r[0] + '</time><div><div class="what">' + esc(r[1]) +
-        '</div><div class="where">' + esc(r[2]) + '</div><div class="outcome">' + esc(r[3]) + '</div></div></li>';
-    }).join('');
-    if (!animate || reduce) return;
-    var li = document.getElementById('newest'), out = li.querySelector('.outcome'), finalText = out.textContent, urgent = li.classList.contains('urgent');
-    li.classList.remove('urgent'); li.classList.add('arrive', 'is-hidden'); out.textContent = 'Answering…';
-    setTimeout(function () { li.classList.remove('is-hidden'); li.classList.add('is-new'); }, 450);
-    setTimeout(function () { out.textContent = 'Sorting…'; }, 1300);
-    setTimeout(function () { if (urgent) li.classList.add('urgent'); out.textContent = finalText; }, 2300);
-    setTimeout(function () { li.classList.remove('is-new'); }, 3600);
-  }
-  show('letting', true);
-  document.querySelectorAll('.log-switch button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.log-switch button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-      show(b.getAttribute('data-ex'), false);
-    });
-  });
-})();
-
 // Industry tabs (arrow keys move between tabs).
 (function () {
   var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
