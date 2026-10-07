@@ -1,0 +1,111 @@
+/* Keel Co — motion layer: the live call stage, scroll-lit steps, living dashboard preview */
+
+/* ---------- Ambient glow behind dark sections ---------- */
+.hero, .preview { position: relative; isolation: isolate; }
+.hero::before, .preview::before {
+  content: ""; position: absolute; inset: -20% -10% auto -10%; height: 140%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 78% 30%, rgba(140, 201, 186, .16), transparent 70%),
+    radial-gradient(35% 30% at 15% 80%, rgba(46, 127, 110, .18), transparent 70%);
+}
+.preview::before { inset: 0; height: 100%; background: radial-gradient(45% 40% at 85% 15%, rgba(140, 201, 186, .12), transparent 70%); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero::before { animation: drift 18s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-3%, 2%, 0) scale(1.06); } }
+}
+
+/* ---------- The live call stage ---------- */
+.stage {
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, rgba(23, 57, 75, .95), rgba(15, 43, 58, .95));
+  border: 1px solid var(--tide-line); border-radius: 22px; padding: 18px 20px 20px;
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 255, 255, .04);
+  min-height: 520px; display: flex; flex-direction: column; gap: 14px;
+}
+.stage-top { display: flex; align-items: center; gap: 10px; }
+.scenario-chip { font-size: .8rem; font-weight: 700; color: var(--tide); background: var(--seaglass); padding: 4px 10px; border-radius: 999px; }
+.stage-time { color: var(--on-tide-muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
+.stage-pause { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--tide-line); background: transparent; color: var(--on-tide-muted); cursor: pointer; display: grid; place-items: center; }
+.stage-pause:hover { color: var(--on-tide); border-color: var(--on-tide-muted); }
+.stage-pause svg { width: 14px; height: 14px; }
+
+.caller-row { display: flex; align-items: center; gap: 16px; }
+.ring-wrap { position: relative; width: 56px; height: 56px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--tide-raised); border: 1px solid var(--tide-line); color: var(--on-tide); transition: background-color .4s, color .4s; }
+.ring-wrap svg { width: 24px; height: 24px; position: relative; z-index: 1; }
+.ring-wrap .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--seaglass); opacity: 0; }
+.stage.is-ringing .ring-wrap { color: var(--seaglass); }
+.stage.is-live .ring-wrap { background: var(--seaglass); color: var(--tide); border-color: var(--seaglass); }
+.stage.is-ended .ring-wrap { background: var(--tide-raised); color: var(--on-tide-muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .stage.is-ringing .ring { animation: ripple 1.6s cubic-bezier(.2, .6, .3, 1) infinite; }
+  .stage.is-ringing .ring:nth-child(2) { animation-delay: .5s; }
+  .stage.is-ringing .ring:nth-child(3) { animation-delay: 1s; }
+  .stage.is-ringing .ring-wrap svg { animation: buzz .5s ease-in-out infinite; }
+  @keyframes ripple { from { transform: scale(1); opacity: .7; } to { transform: scale(2.3); opacity: 0; } }
+  @keyframes buzz { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg); } 75% { transform: rotate(12deg); } }
+}
+.call-state { font-weight: 800; font-size: 1.15rem; color: var(--on-tide); letter-spacing: -0.01em; }
+.call-sub { color: var(--on-tide-muted); font-size: .9rem; }
+
+/* Waveform: bars driven by JS; colour shows who is speaking */
+.wave { display: flex; align-items: center; gap: 3px; height: 44px; padding: 0 2px; }
+.wave i { flex: 1; min-width: 2px; height: 6%; border-radius: 3px; background: var(--tide-line); transition: background-color .25s; }
+.stage[data-speaker="ai"] .wave i { background: var(--seaglass); }
+.stage[data-speaker="caller"] .wave i { background: var(--on-tide); }
+.wave-legend { display: flex; gap: 14px; font-size: .78rem; color: var(--on-tide-muted); margin-top: -6px; }
+.wave-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.wave-legend span::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: currentColor; }
+.wave-legend .k { color: var(--seaglass); } .wave-legend .c { color: var(--on-tide); }
+
+.transcript { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.transcript li { max-width: 88%; padding: 9px 13px; border-radius: 15px; font-size: .93rem; line-height: 1.4; }
+.transcript li.ai { background: rgba(140, 201, 186, .14); color: var(--on-tide); border: 1px solid rgba(140, 201, 186, .25); border-bottom-left-radius: 4px; }
+.transcript li.caller { background: var(--on-tide); color: var(--tide); margin-left: auto; border-bottom-right-radius: 4px; }
+.transcript li .cursor { display: inline-block; width: 2px; height: 1em; background: currentColor; vertical-align: -2px; margin-left: 1px; }
+@media (prefers-reduced-motion: no-preference) { .transcript li .cursor { animation: blink .8s steps(1) infinite; } @keyframes blink { 50% { opacity: 0; } } }
+@media (prefers-reduced-motion: no-preference) { .transcript li { animation: rise .3s ease both; } @keyframes rise { from { opacity: 0; transform: translateY(6px); } } }
+
+.summary { display: flex; flex-wrap: wrap; gap: 6px; min-height: 30px; }
+.summary span { font-size: .8rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; background: var(--tide-raised); color: var(--on-tide); border: 1px solid var(--tide-line); }
+.summary span.urgent { background: var(--buoy); color: var(--buoy-ink); border-color: var(--buoy); }
+@media (prefers-reduced-motion: no-preference) { .summary span { animation: pop .35s cubic-bezier(.3, 1.5, .5, 1) both; } @keyframes pop { from { opacity: 0; transform: scale(.7); } } }
+
+/* The text message that lands on the on-call phone */
+.sms {
+  position: absolute; left: 14px; right: 14px; top: 12px; z-index: 3;
+  display: grid; grid-template-columns: 36px 1fr; gap: 4px 12px; align-items: start;
+  background: rgba(232, 240, 239, .97); color: var(--tide); border-radius: 18px; padding: 12px 14px;
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, .6);
+  transform: translateY(-130%); opacity: 0; transition: transform .55s cubic-bezier(.2, .9, .25, 1.1), opacity .3s;
+}
+.sms.show { transform: none; opacity: 1; }
+.sms img { width: 36px; height: 36px; border-radius: 9px; grid-row: span 2; }
+.sms .sms-top { display: flex; justify-content: space-between; font-size: .78rem; color: #50656F; }
+.sms .sms-top b { color: var(--tide); }
+.sms .sms-body { font-size: .9rem; line-height: 1.35; }
+.sms .sms-body strong { display: block; }
+.sms .sms-link { grid-column: 2; font-size: .82rem; font-weight: 700; color: #1F5E50; }
+
+.stage.fade .transcript, .stage.fade .summary, .stage.fade .sms { opacity: 0; transition: opacity .5s; }
+
+/* ---------- Steps: a line that fills as you scroll ---------- */
+.steps { position: relative; border-top: 0; }
+.steps::before, .steps::after { content: ""; position: absolute; left: 0; top: 0; height: 2px; }
+.steps::before { right: 0; background: var(--line); }
+.steps::after { width: calc(var(--progress, 0) * 100%); background: var(--seaglass-deep); transition: width .2s linear; }
+.steps li { transition: opacity .5s ease, transform .5s ease; }
+.js .steps li:not(.lit) { opacity: .45; }
+.js .steps li:not(.lit)::before { color: var(--slate); }
+@media (max-width: 980px) { .steps::before, .steps::after { display: none; } .steps li { border-top: 2px solid var(--line); } .steps li.lit { border-top-color: var(--seaglass-deep); } }
+
+/* ---------- Dashboard preview: numbers count up, a call gets returned ---------- */
+.pill.flip { animation: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .pill.flip { animation: flip .5s ease both; }
+  @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+}
+.screen { transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .8s; }
+.js .screen.pre { transform: translateY(30px) scale(.98); opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .js .screen.pre { transform: none; opacity: 1; } }
+
+@media (max-width: 560px) { .stage { min-height: 560px; padding: 16px; } .transcript li { font-size: .9rem; } }
