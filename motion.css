@@ -9,10 +9,6 @@
     radial-gradient(35% 30% at 15% 80%, rgba(46, 127, 110, .18), transparent 70%);
 }
 .preview::before { inset: 0; height: 100%; background: radial-gradient(45% 40% at 85% 15%, rgba(140, 201, 186, .12), transparent 70%); }
-@media (prefers-reduced-motion: no-preference) {
-  .hero::before { animation: drift 18s ease-in-out infinite alternate; will-change: transform; }
-  @keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-3%, 2%, 0) scale(1.06); } }
-}
 
 /* ---------- The live call stage ---------- */
 .stage {
@@ -21,6 +17,7 @@
   border: 1px solid var(--tide-line); border-radius: 22px; padding: 18px 20px 20px;
   box-shadow: 0 40px 90px -40px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 255, 255, .04);
   min-height: 520px; display: flex; flex-direction: column; gap: 14px;
+  contain: layout paint; /* changes inside never move the rest of the page */
 }
 .stage-top { display: flex; align-items: center; gap: 10px; }
 .scenario-chip { font-size: .8rem; font-weight: 700; color: var(--tide); background: var(--seaglass); padding: 4px 10px; border-radius: 999px; }
