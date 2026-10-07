@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Keel Co | Missed calls answered for holiday letting</title>
-  <meta name="description" content="Keel Co answers the calls your letting office misses, day and night. Lockouts and leaks go straight to your on-call phone. Everything else lands in your call log, ready to return.">
+  <title>Keel Co | AI receptionist for the calls your team misses</title>
+  <meta name="description" content="Keel Co answers the calls your business misses, day and night. Urgent calls reach your on-call phone within seconds. Everything else lands in your call log with a summary and transcript.">
   <meta name="theme-color" content="#0F2B3A">
   <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <meta property="og:title" content="Keel Co | Missed calls answered for holiday letting">
-  <meta property="og:description" content="The calls your office misses, answered. Urgent ones reach your on-call phone in seconds.">
+  <meta property="og:title" content="Keel Co | AI receptionist for the calls your team misses">
+  <meta property="og:description" content="The calls your team can't get to, answered. Urgent ones reach your on-call phone in seconds.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,10 +21,10 @@
   <div class="wrap">
     <a class="brand" href="/"><img src="/assets/mark.svg" alt="" width="32" height="32">Keel Co</a>
     <nav class="nav" aria-label="Main">
+      <a href="#industries">Industries</a>
       <a href="#how">How it works</a>
       <a href="#dashboard">Dashboard</a>
       <a href="#pilot">Pilot</a>
-      <a href="#faq">FAQ</a>
       <a class="signin" href="/dashboard">Client sign in</a>
     </nav>
   </div>
@@ -34,57 +34,85 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap">
       <div>
-        <h1 id="hero-title">The calls your letting office misses, answered.</h1>
-        <p class="lede">When your team can't pick up, Keel Co does. Locked-out guests and leaks reach your on-call phone within seconds. Bookings, questions and complaints land in your call log, ready to return.</p>
+        <h1 id="hero-title">The calls your team can't get to, answered.</h1>
+        <p class="lede">Keel Co is an AI receptionist for Australian businesses that can't always pick up. Urgent calls reach your on-call phone within seconds. Everything else lands in your call log with a summary and full transcript, ready to return.</p>
         <div class="hero-actions">
           <a class="btn btn-buoy" href="#pilot">Start a 30-day pilot</a>
-          <a class="btn btn-ghost-dark" href="#dashboard">See the call log</a>
+          <a class="btn btn-ghost-dark" href="#industries">See who it's for</a>
         </div>
-        <p class="hero-note">Built in Queensland for holiday and short-stay letting.</p>
+        <p class="hero-note">Built and supported in Brisbane.</p>
       </div>
 
-      <div class="log" aria-label="Example: a night of missed calls handled by Keel Co">
-        <div class="log-head"><strong>After hours on the line</strong><span>Example night</span></div>
-        <ol>
-          <li class="arrive" id="newest">
-            <time>11:42pm</time>
-            <div>
-              <div class="what">Guest locked out</div>
-              <div class="where">Seabreeze, unit 1204. Key code not working.</div>
-              <div class="outcome" id="newest-outcome">On-call texted 9 seconds after the call</div>
-            </div>
-          </li>
-          <li class="urgent">
-            <time>10:15pm</time>
-            <div>
-              <div class="what">No hot water</div>
-              <div class="where">The Shoals, unit 7. Family checked in today.</div>
-              <div class="outcome">On-call texted</div>
-            </div>
-          </li>
-          <li>
-            <time>9:03pm</time>
-            <div>
-              <div class="what">Booking enquiry</div>
-              <div class="where">4 nights in January, 2 adults and 2 kids, near the beach.</div>
-              <div class="outcome">Sent to reservations</div>
-            </div>
-          </li>
-          <li>
-            <time>7:48pm</time>
-            <div>
-              <div class="what">Owner question</div>
-              <div class="where">Wants to talk about next month's statement.</div>
-              <div class="outcome">Message for management</div>
-            </div>
-          </li>
-        </ol>
-        <p class="log-foot">An illustration of how calls are sorted. Names and units are made up.</p>
+      <div class="log" aria-label="Example: an evening of missed calls handled by Keel Co">
+        <div class="log-head"><strong>After hours on the line</strong><span>Example evening</span></div>
+        <div class="log-switch" role="group" aria-label="Show an example for">
+          <button type="button" data-ex="letting" aria-pressed="true">Holiday letting</button>
+          <button type="button" data-ex="clinic" aria-pressed="false">Physio clinic</button>
+          <button type="button" data-ex="trades" aria-pressed="false">Plumbing</button>
+        </div>
+        <ol id="log-list"></ol>
+        <p class="log-foot">An illustration of how calls are sorted. Names and details are made up.</p>
       </div>
     </div>
   </section>
 
-  <section id="how" aria-labelledby="how-title">
+  <section id="industries" aria-labelledby="ind-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="ind-title">Set up around how your business works</h2>
+        <p class="lede">Every business gets its own urgent list, its own approved answers and its own on-call contacts. Here's what that looks like in the industries we work with.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Industries">
+        <button role="tab" id="tab-letting" aria-controls="panel-letting" aria-selected="true">Holiday letting</button>
+        <button role="tab" id="tab-pm" aria-controls="panel-pm" aria-selected="false" tabindex="-1">Property management</button>
+        <button role="tab" id="tab-clinic" aria-controls="panel-clinic" aria-selected="false" tabindex="-1">Health clinics</button>
+        <button role="tab" id="tab-trades" aria-controls="panel-trades" aria-selected="false" tabindex="-1">Trades and services</button>
+      </div>
+
+      <div role="tabpanel" id="panel-letting" aria-labelledby="tab-letting">
+        <p class="tab-intro">Guests call at check-in, late at night and on weekends. The urgent ones can't wait until morning.</p>
+        <div class="call-types">
+          <div class="call-type"><span class="said">"The key code isn't working."</span><span class="does">Takes the building, unit and best number, then texts your on-call phone.</span><span class="tag urgent">Urgent</span></div>
+          <div class="call-type"><span class="said">"There's water coming through the ceiling."</span><span class="does">Leaks, no power and no hot water are flagged straight away.</span><span class="tag urgent">Urgent</span></div>
+          <div class="call-type"><span class="said">"Do you have anything free in January?"</span><span class="does">Captures dates, guests and what they're after, and mentions booking direct on your website.</span><span class="tag">To reservations</span></div>
+          <div class="call-type"><span class="said">"We've just arrived and it hasn't been cleaned."</span><span class="does">Gets the specifics and never promises refunds or room moves your team hasn't agreed to.</span><span class="tag">To the team</span></div>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panel-pm" aria-labelledby="tab-pm" hidden>
+        <p class="tab-intro">Tenants, owners and tradespeople all call the same number. Keel Co sorts them and gets each message to the right person.</p>
+        <div class="call-types">
+          <div class="call-type"><span class="said">"A pipe's burst under the sink."</span><span class="does">Emergency repairs like burst pipes, gas smells and no power go to your after-hours contact straight away.</span><span class="tag urgent">Urgent</span></div>
+          <div class="call-type"><span class="said">"The oven's stopped working."</span><span class="does">Logs a routine maintenance request with the address, the problem and when the tenant is home.</span><span class="tag">Maintenance</span></div>
+          <div class="call-type"><span class="said">"I'm calling about the inspection on Friday."</span><span class="does">Takes the message for the property manager. It never confirms tenancy details to someone it can't verify.</span><span class="tag">To the PM</span></div>
+          <div class="call-type"><span class="said">"I own 14 Smith Street, can someone call me?"</span><span class="does">Owners get a clear message to their property manager with what it's about.</span><span class="tag">Message</span></div>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panel-clinic" aria-labelledby="tab-clinic" hidden>
+        <p class="tab-intro">For physio, chiro, dental and allied health practices whose front desk is busy with patients in the room.</p>
+        <div class="call-types">
+          <div class="call-type"><span class="said">"I've hurt my back. Can I get in today?"</span><span class="does">Takes the patient's details and preferred times as a booking request for your team to confirm. It never gives clinical advice.</span><span class="tag">Booking request</span></div>
+          <div class="call-type"><span class="said">"I need to cancel tomorrow's appointment."</span><span class="does">Captures the name and appointment time so reception can free up the slot and offer it to someone else.</span><span class="tag">To reception</span></div>
+          <div class="call-type"><span class="said">"Is it covered by my health fund?"</span><span class="does">Answers only from information the practice has approved. Anything else gets a callback.</span><span class="tag">Callback</span></div>
+          <div class="call-type"><span class="said">"I've got chest pain."</span><span class="does">Anything that sounds like an emergency: the caller is told to hang up and ring 000.</span><span class="tag urgent">Emergency</span></div>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panel-trades" aria-labelledby="tab-trades" hidden>
+        <p class="tab-intro">For plumbers, electricians and service businesses whose phone rings while they're on the tools.</p>
+        <div class="call-types">
+          <div class="call-type"><span class="said">"My hot water system has burst."</span><span class="does">Urgent jobs go straight to whoever's on call, with the address and the customer's number.</span><span class="tag urgent">Urgent</span></div>
+          <div class="call-type"><span class="said">"Can I get a quote for a new switchboard?"</span><span class="does">Captures the job, the address and the best time to call, so you can quote without phone tag.</span><span class="tag">New job</span></div>
+          <div class="call-type"><span class="said">"What time are you coming tomorrow?"</span><span class="does">Takes the message for the office. It never makes up arrival times.</span><span class="tag">To the office</span></div>
+          <div class="call-type"><span class="said">"Do you do weekend call-outs?"</span><span class="does">Answers from your approved information and passes the enquiry on.</span><span class="tag">Callback</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="calls-band" id="how" aria-labelledby="how-title">
     <div class="wrap">
       <div class="section-head">
         <h2 id="how-title">What happens when a call rings out</h2>
@@ -93,27 +121,10 @@
       <ol class="steps">
         <li><h3>Your phone rings out</h3><p>After a set number of rings, or after hours, your phone system passes the call to your Keel Co line.</p></li>
         <li><h3>Keel Co answers</h3><p>In your business's name, in a natural Australian voice. Callers are told they're speaking with a virtual assistant.</p></li>
-        <li><h3>It works out what matters</h3><p>Who's calling, where they're staying, what's wrong, and whether it can wait until morning.</p></li>
-        <li><h3>The right person hears about it</h3><p>Urgent calls text your on-call phone straight away. Everything else is emailed as a short summary.</p></li>
-        <li><h3>It's in your call log</h3><p>Every call is saved with a summary and full transcript, so whoever calls back has the whole story.</p></li>
+        <li><h3>It works out what matters</h3><p>Who's calling, what they need, and whether it can wait until your team is back.</p></li>
+        <li><h3>The right person hears about it</h3><p>Urgent calls text your on-call phone straight away. Everything else waits in your call log.</p></li>
+        <li><h3>Your team calls back</h3><p>With a summary and the full transcript in front of them, so nobody has to ask the caller twice.</p></li>
       </ol>
-    </div>
-  </section>
-
-  <section class="calls-band" aria-labelledby="types-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="types-title">Built for the calls guests actually make</h2>
-        <p class="lede">Keel Co is set up around how holiday letting works, from check-in night to check-out morning.</p>
-      </div>
-      <div class="call-types">
-        <div class="call-type"><span class="said">"The key code isn't working."</span><span class="does">Takes the building, unit and best number, then texts your on-call phone.</span><span class="tag urgent">Urgent</span></div>
-        <div class="call-type"><span class="said">"There's water coming through the ceiling."</span><span class="does">Leaks, no power and no hot water are flagged straight away. Smoke, gas or injury: the caller is told to ring 000.</span><span class="tag urgent">Urgent</span></div>
-        <div class="call-type"><span class="said">"Do you have anything free in January?"</span><span class="does">Captures dates, guests and what they're after, and mentions booking direct on your website.</span><span class="tag">To reservations</span></div>
-        <div class="call-type"><span class="said">"We've just arrived and it hasn't been cleaned."</span><span class="does">Listens, gets the specifics, and never promises refunds or room moves your team hasn't agreed to.</span><span class="tag">To the team</span></div>
-        <div class="call-type"><span class="said">"What's the wifi password?"</span><span class="does">Answers only from information you've approved. Anything else gets a callback, never a guess.</span><span class="tag">Callback</span></div>
-        <div class="call-type"><span class="said">"I own unit 6, can someone call me?"</span><span class="does">Owners, cleaners and tradespeople get a clean message to the right person.</span><span class="tag">Message</span></div>
-      </div>
     </div>
   </section>
 
@@ -121,7 +132,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="dash-title">Every call, in one place</h2>
-        <p class="lede">Your team signs in to see who called, what they needed, and which calls are still waiting for a call back.</p>
+        <p class="lede">Your team signs in to see who called, what they needed, and which calls are still waiting for a call back. No digging through emails.</p>
       </div>
 
       <div class="screen" role="img" aria-label="Preview of the Keel Co call log, showing call counts, a list of calls and one call's transcript">
@@ -152,9 +163,16 @@
       </div>
 
       <div class="preview-points">
-        <div><h3>See what's waiting</h3><p>Urgent calls that haven't been returned sit at the top until someone marks them called back.</p></div>
-        <div><h3>Read the whole call</h3><p>Every call has a plain-English summary and the full transcript, so nobody has to ask the guest twice.</p></div>
+        <div><h3>See what's waiting</h3><p>Calls that haven't been returned sit at the top, urgent first, until someone marks them called back.</p></div>
+        <div><h3>Read the whole call</h3><p>Every call has a plain-English summary and the full transcript. One tap from the urgent text opens it.</p></div>
         <div><h3>Know your numbers</h3><p>How many calls you'd have missed, how many were urgent, and how many came after hours.</p></div>
+      </div>
+
+      <div class="trust">
+        <div><b>Australian voice</b><span>Natural, calm and clear on the phone.</span></div>
+        <div><b>Every call saved</b><span>Summary and full transcript for every call.</span></div>
+        <div><b>Private by design</b><span>Each business sees only its own calls.</span></div>
+        <div><b>Local support</b><span>Set up and looked after from Brisbane.</span></div>
       </div>
     </div>
   </section>
@@ -163,14 +181,15 @@
     <div class="wrap rules">
       <div>
         <h2 id="rules-title">Ground rules it never breaks</h2>
-        <p class="lede" style="margin-top:20px">A receptionist that makes things up is worse than voicemail. Keel Co is set up to stay inside what your business has approved.</p>
+        <p class="lede" style="margin-top:20px">A receptionist that makes things up is worse than voicemail. Keel Co stays inside what your business has approved.</p>
       </div>
       <ul class="rule-list">
-        <li><div><strong>Never invents an answer</strong><span>Check-in times, prices, availability and policies come only from what you've given it. If it doesn't know, it says so and arranges a callback.</span></div></li>
-        <li><div><strong>Never shares access codes</strong><span>Door codes, key-safe codes and wifi passwords stay with your team, who confirm the guest first.</span></div></li>
-        <li><div><strong>Never promises what you haven't</strong><span>No refunds, discounts, room moves or callback times beyond what you've agreed.</span></div></li>
-        <li><div><strong>Reads every number back</strong><span>Callback numbers and unit numbers are confirmed with the caller before the call ends.</span></div></li>
-        <li><div><strong>Sends emergencies to 000</strong><span>Smoke, gas, injury or danger: the caller is told to hang up and ring triple zero.</span></div></li>
+        <li><div><strong>Never invents an answer</strong><span>Prices, availability, opening hours and policies come only from what you've given it. If it doesn't know, it says so and arranges a callback.</span></div></li>
+        <li><div><strong>Never shares private details</strong><span>Access codes, passwords and other customers' information stay with your team.</span></div></li>
+        <li><div><strong>Never gives professional advice</strong><span>No medical, legal or technical advice. It takes the details and your team takes it from there.</span></div></li>
+        <li><div><strong>Never promises what you haven't</strong><span>No refunds, discounts or callback times beyond what you've agreed.</span></div></li>
+        <li><div><strong>Reads every number back</strong><span>Callback numbers and addresses are confirmed with the caller before the call ends.</span></div></li>
+        <li><div><strong>Sends emergencies to 000</strong><span>Fire, gas, injury or danger: the caller is told to hang up and ring triple zero.</span></div></li>
       </ul>
     </div>
   </section>
@@ -179,11 +198,11 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="phones-title">Works with the phones you have</h2>
-        <p class="lede">No new handsets, no new numbers for guests to learn.</p>
+        <p class="lede">No new handsets and no new number for customers to learn.</p>
       </div>
       <div class="phone-grid">
-        <div><h3>Keep your numbers</h3><p>Guests keep calling the numbers on your website and booking confirmations. Only unanswered calls are passed on.</p></div>
-        <div><h3>Set up once</h3><p>Your phone system forwards calls that ring out to your Keel Co line. With systems like 3CX it's a single setting.</p></div>
+        <div><h3>Keep your numbers</h3><p>Customers keep calling the numbers they already have. Only calls your team doesn't answer are passed on.</p></div>
+        <div><h3>Set up once</h3><p>Your phone system forwards calls that ring out to your Keel Co line. On most business phone systems, including 3CX, it's a single setting.</p></div>
         <div><h3>Turn it off any time</h3><p>Switch the forwarding off and your phones work exactly as they did before.</p></div>
       </div>
     </div>
@@ -193,9 +212,9 @@
     <div class="wrap pilot">
       <div>
         <h2 id="pilot-title">Start with a 30-day pilot</h2>
-        <p class="lede" style="margin-top:20px">Try Keel Co on one brand or one office. If it doesn't earn its place, switch the forwarding off.</p>
+        <p class="lede" style="margin-top:20px">Try Keel Co on one location or one phone line. If it doesn't earn its place, switch the forwarding off.</p>
         <ul class="pilot-terms">
-          <li><b>Set up around your business</b><span>Your buildings, your urgent list, your on-call contacts and your wording.</span></li>
+          <li><b>Set up around your business</b><span>Your urgent list, your approved answers, your on-call contacts and your wording.</span></li>
           <li><b>Missed calls only</b><span>Your team keeps answering as normal. Keel Co only takes what they can't.</span></li>
           <li><b>A clear read-out at the end</b><span>How many calls it answered, what they were about, and what would have gone to voicemail.</span></li>
           <li><b>No lock-in</b><span>Pricing is based on your call volume and agreed in writing before the pilot ends.</span></li>
@@ -212,15 +231,28 @@
           <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
           <div class="field"><label for="f-phone">Phone <span class="hint">(optional)</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
         </div>
-        <div class="field">
-          <label for="f-missed">Roughly how many calls go unanswered each day?</label>
-          <select id="f-missed" name="missed_calls">
-            <option value="">Not sure</option>
-            <option>Under 10</option>
-            <option>10 to 30</option>
-            <option>30 to 100</option>
-            <option>Over 100</option>
-          </select>
+        <div class="two">
+          <div class="field">
+            <label for="f-industry">Industry</label>
+            <select id="f-industry" name="industry">
+              <option value="">Choose one</option>
+              <option>Holiday or short-stay letting</option>
+              <option>Property management</option>
+              <option>Health clinic</option>
+              <option>Trades or services</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-missed">Unanswered calls a day</label>
+            <select id="f-missed" name="missed_calls">
+              <option value="">Not sure</option>
+              <option>Under 10</option>
+              <option>10 to 30</option>
+              <option>30 to 100</option>
+              <option>Over 100</option>
+            </select>
+          </div>
         </div>
         <div class="field"><label for="f-message">Anything we should know? <span class="hint">(optional)</span></label><textarea id="f-message" name="message" maxlength="2000"></textarea></div>
         <button class="btn btn-ink" type="submit">Send enquiry</button>
@@ -233,12 +265,12 @@
     <div class="wrap">
       <h2 id="faq-title" style="margin-bottom:36px">Questions</h2>
       <div class="faq">
-        <details><summary>Will guests know they're talking to an AI?</summary><p>Yes. Keel Co introduces itself as a virtual assistant at the start of every call, and says so if anyone asks. Most callers just want their problem passed to a person quickly, and that's what it does.</p></details>
+        <details><summary>Will callers know they're talking to an AI?</summary><p>Yes. Keel Co introduces itself as a virtual assistant at the start of every call, and says so if anyone asks. Most callers just want their message to reach a person quickly, and that's what it does.</p></details>
         <details><summary>What if it gets something wrong?</summary><p>Every call is saved with a full transcript, so your team can check exactly what was said. Names and numbers are read back to the caller before the call ends, and it never commits your business to anything it hasn't been told it can.</p></details>
-        <details><summary>Does it replace our reception team?</summary><p>No. It answers the calls that would otherwise ring out or go to voicemail: when everyone's busy, on another line, or gone home for the night.</p></details>
-        <details><summary>How are urgent calls handled after hours?</summary><p>You choose what counts as urgent and who's on call. When an urgent call comes in, the on-call person gets a text with the guest's name, location, problem and callback number within seconds of the call ending.</p></details>
-        <details><summary>Where is call information stored?</summary><p>Your call log is stored in Sydney. Some of the services that run the calls process information overseas. Our <a href="/privacy">privacy policy</a> lists each one and how long information is kept.</p></details>
-        <details><summary>Can it take bookings?</summary><p>It captures booking enquiries in full (dates, guests and preferences) for your reservations team to confirm. It doesn't check availability or quote prices unless you've set it up to.</p></details>
+        <details><summary>Does it replace our reception team?</summary><p>No. It answers the calls that would otherwise ring out or go to voicemail: when everyone's busy, on another line, or gone home for the day.</p></details>
+        <details><summary>How are urgent calls handled after hours?</summary><p>You choose what counts as urgent and who's on call. When an urgent call comes in, the on-call person gets a text with the caller's name, the problem and their number within seconds of the call ending, plus a link to the full call.</p></details>
+        <details><summary>Where is call information kept?</summary><p>Your call log is stored in Australia, in Sydney, and only your business can see it. To answer calls, Keel Co uses established global providers for the phone line and voice, which process call audio on their own servers, some of them overseas. Our <a href="/privacy">privacy policy</a> names each one and how long information is kept.</p></details>
+        <details><summary>Can it take bookings?</summary><p>It captures booking requests in full for your team to confirm. It doesn't check availability or quote prices unless you've set it up to.</p></details>
       </div>
     </div>
   </section>
@@ -259,20 +291,70 @@
 
 <script src="/config.js"></script>
 <script>
-// Hero: the newest call arrives, then gets flagged urgent once the on-call text "goes out".
+// Hero log: example evenings for three kinds of business. The first view plays one arrival.
 (function () {
-  var li = document.getElementById('newest');
-  var out = document.getElementById('newest-outcome');
-  if (!li || !out) return;
+  var EX = {
+    letting: [
+      ["11:42pm", "Guest locked out", "Seabreeze, unit 1204. Key code not working.", "On-call texted 9 seconds after the call", true],
+      ["10:15pm", "No hot water", "The Shoals, unit 7. Family checked in today.", "On-call texted", true],
+      ["9:03pm", "Booking enquiry", "4 nights in January, 2 adults and 2 kids, near the beach.", "Sent to reservations", false],
+      ["7:48pm", "Owner question", "Wants to talk about next month's statement.", "Message for management", false]
+    ],
+    clinic: [
+      ["7:55pm", "New patient booking", "Lower back pain, prefers early mornings this week.", "Booking request for reception", false],
+      ["7:20pm", "Cancellation", "Can't make 9:30am tomorrow with Sarah.", "Slot flagged for reception", false],
+      ["6:41pm", "Health fund question", "Asking whether dry needling is covered.", "Callback in the morning", false],
+      ["6:05pm", "Possible emergency", "Caller mentioned chest pain.", "Told to ring 000", true]
+    ],
+    trades: [
+      ["9:58pm", "Burst hot water system", "Water through the laundry, 12 Ocean Pde.", "On-call texted 7 seconds after the call", true],
+      ["8:30pm", "Quote request", "Bathroom renovation, wants a site visit next week.", "New job for the office", false],
+      ["7:12pm", "Arrival time", "Asking when the plumber is coming tomorrow.", "Message for the office", false],
+      ["6:40pm", "Blocked toilet", "Only toilet in the house, two young kids.", "On-call texted", true]
+    ]
+  };
+  var list = document.getElementById('log-list');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { li.classList.add('urgent'); return; }
-  var finalText = out.textContent;
-  li.classList.add('is-hidden');
-  out.textContent = 'Answering…';
-  setTimeout(function () { li.classList.remove('is-hidden'); li.classList.add('is-new'); }, 450);
-  setTimeout(function () { out.textContent = 'Sorting…'; }, 1300);
-  setTimeout(function () { li.classList.add('urgent'); out.textContent = finalText; }, 2300);
-  setTimeout(function () { li.classList.remove('is-new'); }, 3600);
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function show(key, animate) {
+    list.innerHTML = EX[key].map(function (r, i) {
+      return '<li' + (r[4] ? ' class="urgent"' : '') + (i === 0 ? ' id="newest"' : '') + '><time>' + r[0] + '</time><div><div class="what">' + esc(r[1]) +
+        '</div><div class="where">' + esc(r[2]) + '</div><div class="outcome">' + esc(r[3]) + '</div></div></li>';
+    }).join('');
+    if (!animate || reduce) return;
+    var li = document.getElementById('newest'), out = li.querySelector('.outcome'), finalText = out.textContent, urgent = li.classList.contains('urgent');
+    li.classList.remove('urgent'); li.classList.add('arrive', 'is-hidden'); out.textContent = 'Answering…';
+    setTimeout(function () { li.classList.remove('is-hidden'); li.classList.add('is-new'); }, 450);
+    setTimeout(function () { out.textContent = 'Sorting…'; }, 1300);
+    setTimeout(function () { if (urgent) li.classList.add('urgent'); out.textContent = finalText; }, 2300);
+    setTimeout(function () { li.classList.remove('is-new'); }, 3600);
+  }
+  show('letting', true);
+  document.querySelectorAll('.log-switch button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.log-switch button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      show(b.getAttribute('data-ex'), false);
+    });
+  });
+})();
+
+// Industry tabs (arrow keys move between tabs).
+(function () {
+  var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(t) {
+    tabs.forEach(function (x) {
+      var on = x === t;
+      x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) {
+      var j = e.key === 'ArrowRight' ? (i + 1) % tabs.length : e.key === 'ArrowLeft' ? (i - 1 + tabs.length) % tabs.length : -1;
+      if (j > -1) { e.preventDefault(); select(tabs[j]); tabs[j].focus(); }
+    });
+  });
 })();
 
 // Enquiry form: saved straight to the Keel Co database.
