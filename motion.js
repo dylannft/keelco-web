@@ -76,6 +76,28 @@
     }
     function wake() { if (!reduce && !rafId) rafId = requestAnimationFrame(frame); }
 
+    function lockHeight() {
+      // Measure on an invisible copy so the live animation is never disturbed.
+      var c = st.cloneNode(true), max = 0;
+      c.removeAttribute("id"); c.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;left:-9999px;top:0;height:auto;width:" + st.offsetWidth + "px";
+      st.parentNode.appendChild(c);
+      var cl = c.querySelector(".transcript"), cs = c.querySelector(".summary");
+      SCENES.forEach(function (S) {
+        cl.innerHTML = S.lines.map(function (l) { return '<li class="' + l[0] + '" style="animation:none">' + l[1].replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</li>"; }).join("");
+        cs.innerHTML = S.tags.map(function (t) { return '<span style="animation:none">' + t[0] + "</span>"; }).join("");
+        max = Math.max(max, c.scrollHeight);
+      });
+      c.parentNode.removeChild(c);
+      st.style.height = Math.ceil(max + 4) + "px";
+    }
+    lockHeight();
+    var lastW = window.innerWidth, rT;
+    window.addEventListener("resize", function () {
+      if (window.innerWidth === lastW) return; lastW = window.innerWidth;
+      clearTimeout(rT); rT = setTimeout(lockHeight, 150);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
+
     function later(fn, ms) { timers.push(setTimeout(function () { if (!paused) fn(); else pending.push(fn); }, ms)); }
     var pending = [];
 
