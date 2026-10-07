@@ -30,7 +30,7 @@
         ["ai", "Got it. I'll pass this to reception to confirm a time with you first thing."]
       ],
       tags: [["New patient", false], ["Booking request", false], ["Early mornings", false], ["Callback 8am", false]],
-      sms: ["Booking request", "Joel Barish, new patient, lower back pain. Prefers early mornings. Call back 0412 555 019."]
+      sms: ["Booking request", "Ron Burgundy, new patient, lower back pain. Prefers early mornings. Call back 0412 555 019."]
     },
     {
       chip: "Plumbing", time: "9:58pm", sub: "Team on another job", ended: "Call ended after 1:34",
