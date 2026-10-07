@@ -113,10 +113,12 @@
     var btn = $("login-btn"); btn.disabled = true; btn.textContent = "Sending link…";
     var pend = storeGet("keel.pending");
     var redirect = window.location.origin + "/dashboard" + (pend ? "?c=" + encodeURIComponent(pend) : "");
-    authFetch("/auth/v1/otp?redirect_to=" + encodeURIComponent(redirect), { method: "POST", body: JSON.stringify({ email: email, create_user: true }) })
+    // create_user:false: only people Keel Co has set up can sign in. The reply is the same
+    // whether or not the email has access, so this page never reveals who our clients are.
+    authFetch("/auth/v1/otp?redirect_to=" + encodeURIComponent(redirect), { method: "POST", body: JSON.stringify({ email: email, create_user: false }) })
       .then(function (r) {
         if (r.status === 429) throw new Error("Too many sign-in emails were sent. Wait a minute, then try again.");
-        if (!r.ok) throw new Error("We couldn't send the link. Check the address and try again.");
+        if (r.status >= 500) throw new Error("We couldn't send the link just now. Try again in a minute.");
         $("sent-to").textContent = email; $("login-form").hidden = true; $("login-sent").hidden = false;
       })
       .catch(function (err) { st.className = "status err"; st.textContent = err.message; })
