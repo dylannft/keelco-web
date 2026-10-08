@@ -57,7 +57,7 @@
     var bars = [];
     for (var i = 0; i < 36; i++) { var b = document.createElement("i"); wave.appendChild(b); bars.push(b); }
 
-    var paused = false, timers = [], scene = 0, talking = false;
+    var paused = false, timers = [], scene = 0, talking = false, live = null, started = false;
 
     // Waveform: bars scale on the GPU (no layout work), and only while someone is
     // speaking and the stage is on screen. Otherwise they settle into a flat line.
@@ -65,6 +65,7 @@
     function setFlat() { if (flat) return; flat = true; for (var i = 0; i < bars.length; i++) bars[i].style.transform = "scaleY(.08)"; }
     function frame(now) {
       rafId = 0;
+      if (live) { liveFrame(now); return; }
       if (!talking || paused || !onScreen) { setFlat(); return; }
       flat = false;
       var t = (now - t0) / 1000;
@@ -98,7 +99,7 @@
     });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
 
-    function later(fn, ms) { timers.push(setTimeout(function () { if (!paused) fn(); else pending.push(fn); }, ms)); }
+    function later(fn, ms) { timers.push(setTimeout(function () { if (live) return; if (!paused) fn(); else pending.push(fn); }, ms)); }
     var pending = [];
 
     function type(li, text, done) {
@@ -107,6 +108,7 @@
       var node = document.createTextNode(""); li.appendChild(node); li.appendChild(cur);
       var n = 0;
       (function step() {
+        if (live) return;
         if (paused) { pending.push(step); return; }
         n += 2; node.data = text.slice(0, n);
         if (n < text.length) setTimeout(step, 26); else { li.removeChild(cur); done(); }
@@ -153,6 +155,7 @@
     }
 
     pauseBtn.addEventListener("click", function () {
+      if (live) { if (live.ended) backToExamples(); return; }
       paused = !paused;
       pauseBtn.setAttribute("aria-pressed", String(paused));
       pauseBtn.setAttribute("aria-label", paused ? "Play the example call" : "Pause the example call");
@@ -165,15 +168,164 @@
 
     // Only play while the stage is on screen.
     if ("IntersectionObserver" in window && !reduce) {
-      var started = false;
       new IntersectionObserver(function (es) {
         es.forEach(function (e) {
           onScreen = e.isIntersecting;
           if (onScreen) wake();
-          if (e.isIntersecting && !started) { started = true; play(0); }
+          if (e.isIntersecting && !started && !live) { started = true; play(0); }
         });
       }, { threshold: 0.05 }).observe(st);
-    } else { play(0); }
+    } else { started = true; play(0); }
+
+    // -------------------------------------------------------------
+    // Live mode: the visitor talks to the demo agent in the browser.
+    // -------------------------------------------------------------
+    var AGENT_ID = "agent_2901m4d911yjf2qsasvmwxrj8dqc";
+    var SDK = "https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.25.0/+esm";
+    var talkBtn = $("#sc-talk"), hostBtns = [].slice.call(document.querySelectorAll("[data-talk]"));
+    var ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
+    var MIC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1a7 7 0 0 0 6-6.9z" fill="currentColor"/></svg>';
+    var HANG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9c-1.6 0-3.1.3-4.6.8v3.1c0 .4-.2.7-.6.9-1 .5-1.9 1.1-2.6 1.8-.2.2-.4.3-.7.3s-.5-.1-.7-.3L.3 13.1A1 1 0 0 1 0 12.4c0-.3.1-.5.3-.7A16.9 16.9 0 0 1 12 7c4.5 0 8.6 1.8 11.7 4.7.2.2.3.4.3.7s-.1.5-.3.7l-2.5 2.5c-.2.2-.4.3-.7.3s-.5-.1-.7-.3c-.8-.7-1.7-1.3-2.6-1.8-.3-.2-.6-.5-.6-.9V9.8C15.1 9.3 13.6 9 12 9z" fill="currentColor"/></svg>';
+
+    function setTalk(mode) {
+      if (!talkBtn) return;
+      talkBtn.classList.toggle("is-end", mode === "end");
+      talkBtn.disabled = mode === "wait";
+      talkBtn.innerHTML = (mode === "end" ? HANG : MIC) + "<span>" + (mode === "end" ? "End call" : mode === "wait" ? "Connecting" : mode === "again" ? "Talk again" : "Talk to Kate") + "</span>";
+    }
+    setTalk("start");
+
+    function stopExamples() {
+      timers.forEach(clearTimeout); timers = []; pending = []; started = true;
+      st.className = "stage live-mode"; st.removeAttribute("data-speaker");
+      lines.innerHTML = ""; summary.innerHTML = ""; sms.classList.remove("show");
+      st.setAttribute("role", "region"); st.setAttribute("aria-label", "Live demo call with Kate");
+      lines.removeAttribute("aria-hidden"); lines.setAttribute("aria-live", "polite");
+      pauseBtn.hidden = true;
+    }
+
+    function backToExamples() {
+      if (live && live.conv) { try { live.conv.endSession(); } catch (e) {} }
+      live = null; paused = false;
+      st.setAttribute("role", "img"); st.setAttribute("aria-label", "Animated example: Keel Co answers a missed call, talks with the caller, saves a summary and texts the on-call phone.");
+      lines.setAttribute("aria-hidden", "true"); lines.removeAttribute("aria-live");
+      pauseBtn.hidden = reduce; pauseBtn.setAttribute("aria-pressed", "false"); pauseBtn.setAttribute("aria-label", "Pause the example call");
+      pauseBtn.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor"/></svg>';
+      setTalk("start"); play(scene);
+    }
+
+    function say(role, text) {
+      if (!text) return;
+      var li = document.createElement("li"); li.className = role; li.textContent = text;
+      lines.appendChild(li); lines.scrollTop = lines.scrollHeight;
+    }
+
+    function clock() {
+      if (!live || !live.t0) return;
+      var s = Math.floor((Date.now() - live.t0) / 1000);
+      time.textContent = Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2);
+    }
+
+    // Bars follow the real audio: Kate's voice when she speaks, the visitor's mic otherwise.
+    function liveFrame(now) {
+      var c = live && live.conv;
+      if (!c || live.ended || !onScreen || reduce) { setFlat(); return; }
+      flat = false;
+      var speaking = live.mode === "speaking";
+      var data = null;
+      try { data = speaking ? c.getOutputByteFrequencyData() : c.getInputByteFrequencyData(); } catch (e) {}
+      var vol = 0; try { vol = speaking ? c.getOutputVolume() : c.getInputVolume(); } catch (e) {}
+      var who = speaking ? "ai" : (vol > 0.04 ? "caller" : "");
+      if (who) { if (st.getAttribute("data-speaker") !== who) st.setAttribute("data-speaker", who); } else st.removeAttribute("data-speaker");
+      var n = bars.length, t = (now - t0) / 1000;
+      for (var i = 0; i < n; i++) {
+        var v;
+        if (data && data.length) { var k = Math.floor(Math.abs(i - n / 2) / (n / 2) * Math.min(data.length, 48)); v = data[k] / 255; }
+        else v = vol * (0.6 + 0.4 * Math.abs(Math.sin(t * 7 + i * 0.6)));
+        bars[i].style.transform = "scaleY(" + Math.max(0.08, Math.min(1, v * 1.25)).toFixed(3) + ")";
+      }
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function fail(title, detail) {
+      if (live) { live.ended = true; clearInterval(live.tick); }
+      st.classList.remove("is-ringing", "is-live"); st.classList.add("is-ended"); st.removeAttribute("data-speaker");
+      state.textContent = title; sub.textContent = detail;
+      setTalk("again"); pauseBtn.hidden = false; pauseBtn.innerHTML = ICON_PLAY; pauseBtn.setAttribute("aria-label", "Back to the example calls");
+    }
+
+    function ended() {
+      if (!live || live.ended) return;
+      if (!live.t0) { fail("Kate's busy right now", "Please try again in a minute."); return; }
+      live.ended = true; clearInterval(live.tick);
+      st.classList.remove("is-live", "is-ringing"); st.classList.add("is-ended"); st.removeAttribute("data-speaker");
+      var s = live.t0 ? Math.floor((Date.now() - live.t0) / 1000) : 0;
+      state.textContent = "Call ended" + (s ? " after " + Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2) : "");
+      sub.textContent = "Demo only. Nothing was saved.";
+      smsTitle.textContent = "That's the demo";
+      smsBody.textContent = "For your business, this call would now be summarised in your call log, and urgent ones texted to your on-call phone.";
+      setTimeout(function () { if (live && live.ended) sms.classList.add("show"); }, 600);
+      setTimeout(function () { if (live && live.ended) sms.classList.remove("show"); }, 9000);
+      setTalk("again"); pauseBtn.hidden = false; pauseBtn.innerHTML = ICON_PLAY; pauseBtn.setAttribute("aria-label", "Back to the example calls");
+    }
+
+    function startLive() {
+      if (live && !live.ended) return;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { stopExamples(); live = { ended: true }; fail("This browser can't use a microphone", "Try Chrome, Safari or Edge on a phone or computer."); return; }
+      stopExamples();
+      live = { conv: null, mode: "listening", t0: 0, ended: false };
+      var me = live;
+      st.classList.add("is-ringing");
+      chip.textContent = "Live demo"; time.textContent = "0:00";
+      state.textContent = "Calling Kate"; sub.textContent = "Allow the microphone when your browser asks";
+      setTalk("wait");
+      if (st.getBoundingClientRect().top < 0) st.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        if (me !== live || me.ended) return;
+        sub.textContent = "Connecting";
+        return import(SDK).then(function (mod) {
+          if (me !== live || me.ended) return;
+          return mod.Conversation.startSession({
+            agentId: AGENT_ID,
+            connectionType: "websocket",
+            onConnect: function () {
+              if (me !== live) return;
+              me.t0 = Date.now(); me.tick = setInterval(clock, 500);
+              st.classList.remove("is-ringing"); st.classList.add("is-live");
+              state.textContent = "Talking with Kate"; sub.textContent = "Play a guest. Speak naturally, interrupt any time.";
+              setTalk("end"); wake();
+            },
+            onMessage: function (m) {
+              if (me !== live) return;
+              var r = m.role || m.source;
+              say(r === "agent" || r === "ai" ? "ai" : "caller", m.message);
+            },
+            onModeChange: function (m) { if (me === live) { me.mode = m.mode; wake(); } },
+            onDisconnect: function () { if (me === live) ended(); },
+            onError: function (msg) { if (window.console) console.warn("Keel Co demo:", msg); }
+          }).then(function (conv) {
+            if (me !== live || me.ended) { try { conv.endSession(); } catch (e) {} return; }
+            me.conv = conv; wake();
+          });
+        });
+      }).catch(function (err) {
+        if (me !== live) return;
+        var denied = err && (err.name === "NotAllowedError" || err.name === "SecurityError" || err.name === "NotFoundError");
+        if (denied) fail("Microphone not available", "Allow microphone access for this site, then try again.");
+        else fail("Kate's busy right now", "Please try again in a minute.");
+      });
+    }
+
+    function onTalk(e) {
+      if (e) e.preventDefault();
+      if (live && !live.ended) { if (live.conv) live.conv.endSession(); else fail("Call cancelled", "Tap Talk again whenever you're ready."); return; }
+      startLive();
+    }
+    if (talkBtn) talkBtn.addEventListener("click", onTalk);
+    hostBtns.forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); st.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" }); if (!live || live.ended) startLive(); }); });
+    window.addEventListener("pagehide", function () { if (live && live.conv) try { live.conv.endSession(); } catch (e) {} });
   }
 
   // ---------------------------------------------------------------
