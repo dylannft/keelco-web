@@ -28,7 +28,7 @@
 .stage-talk:disabled { opacity: .7; cursor: progress; transform: none; }
 .stage-talk.is-end { background: #E5484D; color: #fff; }
 .stage-talk:focus-visible, .stage-pause:focus-visible { outline: 2px solid var(--seaglass); outline-offset: 2px; }
-.stage-pause { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--tide-line); background: transparent; color: var(--on-tide-muted); cursor: pointer; display: grid; place-items: center; }
+.stage-pause { margin-left: auto; flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--tide-line); background: transparent; color: var(--on-tide-muted); cursor: pointer; display: grid; place-items: center; }
 .stage-pause:hover { color: var(--on-tide); border-color: var(--on-tide-muted); }
 .stage-pause svg { width: 14px; height: 14px; }
 
