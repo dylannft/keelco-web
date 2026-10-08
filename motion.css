@@ -22,7 +22,13 @@
 .stage-top { display: flex; align-items: center; gap: 10px; }
 .scenario-chip { font-size: .8rem; font-weight: 700; color: var(--tide); background: var(--seaglass); padding: 4px 10px; border-radius: 999px; }
 .stage-time { color: var(--on-tide-muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
-.stage-pause { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--tide-line); background: transparent; color: var(--on-tide-muted); cursor: pointer; display: grid; place-items: center; }
+.stage-talk { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px 0 11px; border-radius: 999px; border: 0; background: var(--buoy); color: var(--buoy-ink); font: inherit; font-size: .85rem; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background-color .2s, transform .15s; }
+.stage-talk svg { width: 16px; height: 16px; flex: none; }
+.stage-talk:hover { transform: translateY(-1px); }
+.stage-talk:disabled { opacity: .7; cursor: progress; transform: none; }
+.stage-talk.is-end { background: #E5484D; color: #fff; }
+.stage-talk:focus-visible, .stage-pause:focus-visible { outline: 2px solid var(--seaglass); outline-offset: 2px; }
+.stage-pause { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--tide-line); background: transparent; color: var(--on-tide-muted); cursor: pointer; display: grid; place-items: center; }
 .stage-pause:hover { color: var(--on-tide); border-color: var(--on-tide-muted); }
 .stage-pause svg { width: 14px; height: 14px; }
 
@@ -83,6 +89,13 @@
 .sms .sms-body strong { display: block; }
 .sms .sms-link { grid-column: 2; font-size: .82rem; font-weight: 700; color: #1F5E50; }
 
+.stage.live-mode .transcript { overflow-y: auto; min-height: 0; overscroll-behavior: contain; scrollbar-width: thin; padding-right: 2px; }
+.stage.live-mode .scenario-chip { background: var(--buoy); color: var(--buoy-ink); }
+.stage.live-mode .sms { top: auto; bottom: 12px; transform: translateY(130%); }
+.stage.live-mode .sms.show { transform: none; }
+.stage.live-mode .sms .sms-link { display: none; }
+.btn-talk svg { width: 18px; height: 18px; margin-right: 6px; vertical-align: -3px; }
+
 .stage.fade .transcript, .stage.fade .summary, .stage.fade .sms { opacity: 0; transition: opacity .5s; }
 
 /* ---------- Steps: a line that fills as you scroll ---------- */
@@ -105,4 +118,5 @@
 .js .screen.pre { transform: translateY(30px) scale(.98); opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .js .screen.pre { transform: none; opacity: 1; } }
 
+@media (max-width: 400px) { .stage-time { display: none; } }
 @media (max-width: 560px) { .stage { min-height: 560px; padding: 16px; } .transcript li { font-size: .9rem; } }
