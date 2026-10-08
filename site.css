@@ -261,3 +261,7 @@ form.enquiry { background: var(--paper); border: 1px solid var(--line); border-r
 .trust b { display: block; color: var(--on-tide); font-size: 1.05rem; }
 .trust span { color: var(--on-tide-muted); font-size: .95rem; }
 @media (max-width: 860px) { .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; } }
+.demo-call { margin-top: 28px; font-size: 1.05rem; color: var(--slate); }
+.demo-call a { display: inline-flex; align-items: center; gap: 8px; margin-left: 4px; font-weight: 800; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--buoy); }
+.demo-call a:hover { border-bottom-color: var(--ink); }
+.demo-call svg { width: 18px; height: 18px; }
