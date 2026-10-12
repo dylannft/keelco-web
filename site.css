@@ -162,7 +162,7 @@ section { padding: clamp(64px, 9vw, 120px) 0; }
 .pill { display: inline-block; font-size: .72rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: #E3EAE8; }
 .pill.urgent { background: #F2B632; color: #2B1F00; }
 .pill.done { background: #D6EEE7; color: #1F5E50; }
-.detail h4 { margin: 0 0 4px; font-size: 1.05rem; }
+.detail h3 { margin: 0 0 4px; font-size: 1.05rem; }
 .detail .meta { color: #50656F; font-size: .85rem; margin-bottom: 14px; }
 .bubble { max-width: 92%; padding: 9px 12px; border-radius: 14px; font-size: .88rem; margin-bottom: 8px; }
 .bubble.ai { background: #E3EAE8; border-bottom-left-radius: 4px; }
