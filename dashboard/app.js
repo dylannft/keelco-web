@@ -21,7 +21,8 @@
     lockout_access: "Lockout or access", maintenance: "Maintenance", complaint_cleanliness: "Cleanliness complaint",
     complaint_other: "Complaint", booking_enquiry: "Booking enquiry", stay_question: "Question about a stay",
     owner: "Property owner", supplier_or_trade: "Supplier or trade", emergency_000: "Emergency (told to call 000)",
-    sales_or_spam: "Sales or spam", other: "Other"
+    sales_or_spam: "Sales or spam", other: "Other",
+    missed_call: "Missed call (texted back)", text_back: "Text message"
   };
   function typeLabel(t) { return TYPE_LABELS[t] || (t ? t.replace(/_/g, " ") : "Other"); }
 
