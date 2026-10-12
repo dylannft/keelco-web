@@ -9,6 +9,13 @@
   <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
   <meta property="og:title" content="Keel Co | AI receptionist for the calls your team misses">
   <meta property="og:description" content="The calls your team can't get to, answered. Urgent ones reach your on-call phone in seconds.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.keelco.au/">
+  <meta property="og:image" content="https://www.keelco.au/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://www.keelco.au/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -165,7 +172,7 @@
             </table>
           </div>
           <div class="detail">
-            <h4>Guest locked out</h4>
+            <h3>Guest locked out</h3>
             <p class="meta">Seabreeze, unit 1204. 1 min 48 sec.</p>
             <div class="bubble ai">Thanks for calling. Which building and unit are you staying in?</div>
             <div class="bubble caller">Seabreeze, twelve oh four. The code's not working.</div>
@@ -306,56 +313,6 @@
 
 <script src="/config.js"></script>
 <script src="/motion.js" defer></script>
-<script>
-// Industry tabs (arrow keys move between tabs).
-(function () {
-  var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
-  function select(t) {
-    tabs.forEach(function (x) {
-      var on = x === t;
-      x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
-      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
-    });
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener('click', function () { select(t); });
-    t.addEventListener('keydown', function (e) {
-      var j = e.key === 'ArrowRight' ? (i + 1) % tabs.length : e.key === 'ArrowLeft' ? (i - 1 + tabs.length) % tabs.length : -1;
-      if (j > -1) { e.preventDefault(); select(tabs[j]); tabs[j].focus(); }
-    });
-  });
-})();
-
-// Enquiry form: saved straight to the Keel Co database.
-(function () {
-  var form = document.getElementById('enquiry');
-  var status = document.getElementById('form-status');
-  if (!form) return;
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var data = Object.fromEntries(new FormData(form).entries());
-    status.className = 'form-status';
-    if (!data.name || !data.name.trim()) { status.className = 'form-status err'; status.textContent = 'Add your name so we know who to reply to.'; form.name.focus(); return; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email || '')) { status.className = 'form-status err'; status.textContent = 'Check your email address. It needs an @ and a domain.'; form.email.focus(); return; }
-    Object.keys(data).forEach(function (k) { data[k] = (data[k] || '').trim() || null; });
-    var btn = form.querySelector('button[type=submit]');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    var c = window.KEEL_CONFIG;
-    fetch(c.supabaseUrl + '/rest/v1/leads', {
-      method: 'POST',
-      headers: { 'apikey': c.supabaseKey, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify(data)
-    }).then(function (r) {
-      if (!r.ok) throw new Error('status ' + r.status);
-      form.reset();
-      status.className = 'form-status ok';
-      status.textContent = 'Thanks. We’ll be in touch within one business day.';
-    }).catch(function () {
-      status.className = 'form-status err';
-      status.textContent = 'That didn’t send. Email us at ' + c.contactEmail + ' instead.';
-    }).finally(function () { btn.disabled = false; btn.textContent = 'Send enquiry'; });
-  });
-})();
-</script>
+<script src="/site.js" defer></script>
 </body>
 </html>
