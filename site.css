@@ -268,7 +268,7 @@ form.enquiry { background: var(--paper); border: 1px solid var(--line); border-r
 
 /* Services */
 .services { background: var(--paper); border-bottom: 1px solid var(--line); }
-.svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.svc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .svc { display: flex; flex-direction: column; gap: 12px; background: var(--salt); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 2.6vw, 32px); }
 .svc-tag { font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--seaglass-deep); }
 .svc h3 { font-size: 1.35rem; line-height: 1.2; }
