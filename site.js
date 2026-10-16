@@ -1,4 +1,4 @@
-/* Keel Co: industry tabs and the enquiry form */
+/* Keel Co: industry tabs, plan buttons and the free-trial form */
 // Industry tabs (arrow keys move between tabs).
 (function () {
   var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
@@ -18,17 +18,25 @@
   });
 })();
 
-// Enquiry form: saved straight to the Keel Co database.
+// Free-trial form: saved straight to the Keel Co database.
 (function () {
   var form = document.getElementById('enquiry');
   var status = document.getElementById('form-status');
   if (!form) return;
+  // Pricing buttons pick the matching plan in the form.
+  [].slice.call(document.querySelectorAll('[data-plan]')).forEach(function (a) {
+    a.addEventListener('click', function () { if (form.plan) form.plan.value = a.getAttribute('data-plan'); });
+  });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var data = Object.fromEntries(new FormData(form).entries());
     status.className = 'form-status';
     if (!data.name || !data.name.trim()) { status.className = 'form-status err'; status.textContent = 'Add your name so we know who to reply to.'; form.name.focus(); return; }
+    if ((data.phone || '').replace(/\D/g, '').length < 8) { status.className = 'form-status err'; status.textContent = 'Add your mobile so we can call you to set it up.'; form.phone.focus(); return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email || '')) { status.className = 'form-status err'; status.textContent = 'Check your email address. It needs an @ and a domain.'; form.email.focus(); return; }
+    // The plan travels in the message, so the leads table needs no new column.
+    var plan = (data.plan || '').trim(); delete data.plan;
+    data.message = ('Free trial: ' + (plan || 'Not sure') + '\n\n' + (data.message || '')).trim();
     Object.keys(data).forEach(function (k) { data[k] = (data[k] || '').trim() || null; });
     var btn = form.querySelector('button[type=submit]');
     btn.disabled = true; btn.textContent = 'Sending…';
@@ -41,10 +49,10 @@
       if (!r.ok) throw new Error('status ' + r.status);
       form.reset();
       status.className = 'form-status ok';
-      status.textContent = 'Thanks. We’ll be in touch within one business day.';
+      status.textContent = 'You’re in. We’ll call you within one business day to set up your free trial.';
     }).catch(function () {
       status.className = 'form-status err';
       status.textContent = 'That didn’t send. Email us at ' + c.contactEmail + ' instead.';
-    }).finally(function () { btn.disabled = false; btn.textContent = 'Send enquiry'; });
+    }).finally(function () { btn.disabled = false; btn.textContent = 'Start my free trial'; });
   });
 })();

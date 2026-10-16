@@ -9,40 +9,40 @@
   // ---------------------------------------------------------------
   var SCENES = [
     {
-      chip: "Holiday letting", time: "11:42pm", sub: "Rang out at reception", ended: "Call ended after 1:48",
+      chip: "Cleaning", time: "2:14pm", sub: "Rang out: on a job", ended: "Call ended after 1:36",
       lines: [
         ["ai", "Hi, thanks for calling. You're speaking with our virtual assistant. How can I help?"],
-        ["caller", "I'm locked out. The key code isn't working."],
-        ["ai", "Sorry you're dealing with that. Which building and unit are you in?"],
-        ["caller", "Seabreeze, twelve oh four."],
-        ["ai", "Thanks. I'm marking this as urgent for our on-call team now."]
+        ["caller", "I'm after a quote for a fortnightly clean. Three bedrooms."],
+        ["ai", "Lovely. How many bathrooms, and which suburb are you in?"],
+        ["caller", "Two bathrooms, in Carindale."],
+        ["ai", "Thanks. I'll pass this on and you'll get a call back this afternoon with a quote."]
       ],
-      tags: [["Urgent", true], ["Lockout", false], ["Seabreeze 1204", false], ["Calling number confirmed", false]],
-      sms: ["URGENT: Guest locked out", "Bruce Wayne, Seabreeze 1204. Key code not working. Call back 0400 111 222."]
+      tags: [["New customer", false], ["Fortnightly clean", false], ["3 bed, 2 bath", false], ["Carindale", false]],
+      sms: ["New quote request", "Sarah, fortnightly clean, 3 bed 2 bath, Carindale. Call back 0400 111 222."]
     },
     {
-      chip: "Physio clinic", time: "6:52pm", sub: "Front desk with a patient", ended: "Call ended after 1:21",
+      chip: "Pest control", time: "6:08pm", sub: "Driving home", ended: "Call ended after 1:52",
       lines: [
-        ["ai", "Thanks for calling the clinic. You're speaking with our virtual assistant. How can I help?"],
-        ["caller", "I've hurt my lower back. Can I get in tomorrow?"],
-        ["ai", "I'm sorry to hear that. Are mornings or afternoons better for you?"],
-        ["caller", "Early morning if possible."],
-        ["ai", "Got it. I'll pass this to reception to confirm a time with you first thing."]
+        ["ai", "Thanks for calling. You're speaking with our virtual assistant. What can I help with?"],
+        ["caller", "We're selling the house and need a termite inspection."],
+        ["ai", "No problem. What's the address, and do you have a settlement or deadline date?"],
+        ["caller", "Eight Banksia Street, Nerang. We need it by Friday."],
+        ["ai", "Got it. I'm flagging the Friday deadline so you hear back first thing tomorrow."]
       ],
-      tags: [["New patient", false], ["Booking request", false], ["Early mornings", false], ["Callback 8am", false]],
-      sms: ["Booking request", "Ron Burgundy, new patient, lower back pain. Prefers early mornings. Call back 0412 555 019."]
+      tags: [["Time-sensitive", true], ["Termite inspection", false], ["8 Banksia St", false], ["Due Friday", false]],
+      sms: ["Termite inspection: due Friday", "Mark, house sale, 8 Banksia St Nerang. Needs report by Friday. Call back 0412 555 019."]
     },
     {
-      chip: "Plumbing", time: "9:58pm", sub: "Team on another job", ended: "Call ended after 1:34",
+      chip: "Pool service", time: "7:40am", sub: "Hands full at a pool", ended: "Call ended after 1:21",
       lines: [
-        ["ai", "Thanks for calling. You're speaking with our virtual assistant. What's happened?"],
-        ["caller", "Our hot water system's burst. There's water everywhere."],
-        ["ai", "Okay. If you can, turn off the water at the mains. What's the address?"],
-        ["caller", "Twelve Ocean Parade, Burleigh."],
-        ["ai", "Thanks. I'm sending this to our on-call plumber right now."]
+        ["ai", "Thanks for calling. You're speaking with our virtual assistant. How can I help?"],
+        ["caller", "My pool's gone green. Can someone come and look at it?"],
+        ["ai", "Sorry about that. What's the address, and is it in-ground or above-ground?"],
+        ["caller", "In-ground, twelve Ocean Parade, Burleigh."],
+        ["ai", "Thanks. I'll send this through now and someone will call you to book a time."]
       ],
-      tags: [["Urgent", true], ["Burst HWS", false], ["12 Ocean Pde", false], ["Calling number confirmed", false]],
-      sms: ["URGENT: Burst hot water system", "John Pork, 12 Ocean Pde, Burleigh. Water through laundry. Call back 0433 820 114."]
+      tags: [["New job", false], ["Green pool", false], ["12 Ocean Pde", false], ["Calling number confirmed", false]],
+      sms: ["New job: green pool", "Jess, in-ground pool gone green, 12 Ocean Pde Burleigh. Call back 0433 820 114."]
     }
   ];
 

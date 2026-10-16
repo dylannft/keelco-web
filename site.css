@@ -279,3 +279,24 @@ form.enquiry { background: var(--paper); border: 1px solid var(--line); border-r
 .svc-example { margin-top: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 14px 14px 14px 4px; padding: 12px 14px; font-size: .93rem; line-height: 1.45; }
 .svc-from { display: block; font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--slate); margin-bottom: 4px; }
 @media (max-width: 980px) { .svc-grid { grid-template-columns: 1fr; } .svc-example { margin-top: 8px; } }
+
+/* Pricing */
+.pricing { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.price-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+.plan { position: relative; display: flex; flex-direction: column; gap: 12px; background: var(--salt); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 2.6vw, 32px); }
+.plan.featured { border: 2px solid var(--seaglass-deep); }
+.plan-badge { position: absolute; top: -13px; left: 24px; background: var(--buoy); color: var(--buoy-ink); font-size: .78rem; font-weight: 800; padding: 4px 12px; border-radius: 999px; }
+.price { display: flex; align-items: baseline; gap: 4px; }
+.price b { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.price span { color: var(--slate); font-weight: 600; }
+.plan-for { color: var(--slate); }
+.plan ul { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 8px; }
+.plan li { display: flex; gap: 10px; align-items: baseline; font-weight: 600; font-size: .98rem; }
+.plan li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--seaglass-deep); transform: translateY(-1px); }
+.plan .btn { margin-top: auto; justify-content: center; }
+.btn-ghost { border-color: var(--ink); color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--salt); }
+.price-note { margin-top: 24px; color: var(--slate); }
+.form-fine { font-size: .85rem; color: var(--slate); margin-top: -6px; }
+.form-fine a { color: inherit; }
+@media (max-width: 980px) { .price-grid { grid-template-columns: 1fr; max-width: 520px; } .plan.featured { order: -1; } }
